@@ -1,0 +1,21 @@
+{
+  "name": "fusebox-starter",
+  "version": "1.0.0",
+  "main": "dist/main/app.js",
+  "author": "Atif Afzal <atif5801@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "ts-node fuse.ts"
+  },
+  "devDependencies": {
+    "fuse-box": "^3.4.0",
+    "prettier": "^1.14.0",
+    "ts-node": "^7.0.0",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.14.0",
+    "typescript": "^3.0.1"
+  },
+  "dependencies": {
+    "electron": "^2.0.5"
+  }
+}
