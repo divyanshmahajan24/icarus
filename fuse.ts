@@ -9,6 +9,7 @@ const fuse = FuseBox.init({
   homeDir: 'src/',
   output: 'dist/$name.js',
   sourceMaps: true,
+  tsConfig: 'src/main/tsconfig.json',
 });
 
 let electronProcess: ChildProcess;
