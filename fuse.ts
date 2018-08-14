@@ -1,10 +1,13 @@
-import { spawn, ChildProcess } from 'child_process';
-import { FuseBox, WebIndexPlugin } from 'fuse-box';
+/**
+ * This file handle the main part of the electron app
+ */
+
+import { ChildProcess, spawn } from 'child_process';
+import { FuseBox } from 'fuse-box';
 
 const fuse = FuseBox.init({
   homeDir: 'src/',
   output: 'dist/$name.js',
-  plugins: [WebIndexPlugin({ bundles: ['renderer/app'] })],
   sourceMaps: true,
 });
 
@@ -15,9 +18,8 @@ fuse
   .target('electron')
   .instructions(' > [main/index.ts]')
   .watch('main/**')
-  .completed(fuseProcess => {
-    console.log(fuseProcess.bundle.name);
-    if (electronProcess) {
+  .completed(() => {
+    if (electronProcess && electronProcess.pid) {
       process.kill(-electronProcess.pid);
     }
 
@@ -38,13 +40,8 @@ fuse
     });
   });
 
-fuse.dev({ port: 7979 });
-
-fuse
-  .bundle('renderer/app')
-  .target('browser@es6')
-  .instructions('> renderer/index.ts')
-  .hmr()
-  .watch('renderer/**');
+process.on('SIGINT', () => {
+  process.kill(-electronProcess.pid);
+});
 
 fuse.run();

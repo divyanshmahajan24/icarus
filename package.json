@@ -5,17 +5,56 @@
   "author": "Atif Afzal <atif5801@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node fuse.ts"
+    "start": "ts-node fuse.ts && webpack-dev-server --hot"
   },
   "devDependencies": {
+    "@types/case-sensitive-paths-webpack-plugin": "^2.1.2",
+    "@types/html-webpack-plugin": "^3.2.0",
+    "@types/ramda": "types/npm-ramda#dist",
+    "@types/react": "^16.4.8",
+    "@types/react-dom": "^16.0.7",
+    "@types/react-redux": "^6.0.0",
+    "@types/react-router-dom": "^4.2.6",
+    "@types/recompose": "^0.26.1",
+    "@types/redux-logger": "^3.0.6",
+    "@types/webpack": "^4.4.9",
+    "@types/webpack-env": "^1.13.6",
+    "awesome-typescript-loader": "^5.2.0",
+    "case-sensitive-paths-webpack-plugin": "^2.1.2",
     "fuse-box": "^3.4.0",
+    "html-webpack-plugin": "^3.2.0",
     "prettier": "^1.14.0",
+    "redux-logger": "^3.0.6",
     "ts-node": "^7.0.0",
+    "tsconfig-paths": "^3.4.2",
     "tslint": "^5.11.0",
     "tslint-config-prettier": "^1.14.0",
-    "typescript": "^3.0.1"
+    "typescript": "^3.0.1",
+    "webpack": "^4.16.5",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.5"
   },
   "dependencies": {
-    "electron": "^2.0.5"
+    "axios": "^0.18.0",
+    "electron": "^2.0.5",
+    "emotion": "^9.2.6",
+    "express": "^4.16.3",
+    "ramda": "^0.25.0",
+    "react": "^16.3.2",
+    "react-dnd": "^5.0.0",
+    "react-dnd-html5-backend": "^5.0.1",
+    "react-dom": "^16.3.2",
+    "react-emotion": "^9.2.6",
+    "react-redux": "^5.0.7",
+    "react-router-dom": "^4.2.2",
+    "recompose": "^0.27.1",
+    "redux": "^4.0.0",
+    "redux-observable": "^1.0.0",
+    "rxjs": "^6.1.0",
+    "ts-transform-jsx-source": "^1.1.0",
+    "typesafe-actions": "^2.0.3",
+    "typescript-fsa": "^3.0.0-beta-2",
+    "typescript-fsa-reducers": "^0.4.5",
+    "utility-types": "^2.0.0"
   }
 }
