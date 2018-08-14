@@ -5,7 +5,7 @@
   "author": "Atif Afzal <atif5801@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node fuse.ts && webpack-dev-server --hot"
+    "start": "concurrently 'ts-node fuse.ts' 'webpack-dev-server --hot' 'cd workspace && yarn start'"
   },
   "devDependencies": {
     "@types/case-sensitive-paths-webpack-plugin": "^2.1.2",
@@ -21,6 +21,7 @@
     "@types/webpack-env": "^1.13.6",
     "awesome-typescript-loader": "^5.2.0",
     "case-sensitive-paths-webpack-plugin": "^2.1.2",
+    "concurrently": "^3.6.1",
     "fuse-box": "^3.4.0",
     "html-webpack-plugin": "^3.2.0",
     "prettier": "^1.14.0",
