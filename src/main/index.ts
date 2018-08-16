@@ -1,9 +1,10 @@
 import * as electron from 'electron';
+import * as ipc from 'electron-better-ipc';
 
 let mainWindow: electron.BrowserWindow | null;
 
 function createWindow() {
-  mainWindow = new electron.BrowserWindow({ width: 800, height: 600 });
+  mainWindow = new electron.BrowserWindow({ width: 1280, height: 800 });
 
   // and load the index.html of the app.
   mainWindow.loadURL('http://localhost:7979');
@@ -37,3 +38,5 @@ electron.app.on('activate', () => {
     createWindow();
   }
 });
+
+ipc.answerRenderer('open-file', arg => console.log('open-file: ', arg));

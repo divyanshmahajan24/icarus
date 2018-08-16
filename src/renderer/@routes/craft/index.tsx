@@ -1,4 +1,5 @@
 import axios from 'axios';
+import * as ipc from 'electron-better-ipc';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import styled from 'react-emotion';
@@ -28,10 +29,7 @@ const CraftingComponentWrapper = styled('div')`
   justify-content: center;
 `;
 
-const TreeRow =
-  styled('div') <
-  { depth: number } >
-  `
+const TreeRow = styled('div')<{ depth: number }>`
   height: 32px;
   border-bottom: 1px solid grey;
   display: flex;
@@ -295,7 +293,7 @@ class HomeRoute extends React.Component<{}, IState> {
                   const div = (
                     <Droppable
                       onDoubleClick={() => {
-                        axios.put('/api/open-file', {
+                        ipc.callMain('open-file', {
                           start: node._debugSource,
                         });
                       }}
