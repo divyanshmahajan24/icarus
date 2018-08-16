@@ -1,4 +1,3 @@
-import axios from 'axios';
 import * as ipc from 'electron-better-ipc';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
@@ -93,7 +92,7 @@ class HomeRoute extends React.Component<{}, IState> {
   private handleDelete = () => {
     const { node } = this.state.nodeMap[this.state.selectedOverlay!];
 
-    axios.put('/api/remove', {
+    ipc.callMain('remove', {
       start: node._debugSource,
     });
   };

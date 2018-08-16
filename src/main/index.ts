@@ -1,5 +1,14 @@
 import * as electron from 'electron';
 import * as ipc from 'electron-better-ipc';
+import * as fs from 'fs';
+import { IJSXSource } from 'interfaces';
+import * as launchEditor from 'react-dev-utils/launchEditor';
+import { promisify } from 'util';
+
+import dragDrop from './controllers/dragDrop';
+import remove from './controllers/remove';
+
+const writeFileAsync = promisify(fs.writeFile);
 
 let mainWindow: electron.BrowserWindow | null;
 
@@ -39,4 +48,21 @@ electron.app.on('activate', () => {
   }
 });
 
-ipc.answerRenderer('open-file', arg => console.log('open-file: ', arg));
+ipc.answerRenderer<{ start: IJSXSource; end: IJSXSource }>(
+  'drag-drop',
+  body => {
+    dragDrop(body).then(newTargetFileText => {
+      writeFileAsync(body.end.fileName, newTargetFileText);
+    });
+  },
+);
+
+ipc.answerRenderer<{ start: IJSXSource }>('remove', body => {
+  remove(body).then(newTargetFileText => {
+    writeFileAsync(body.start.fileName, newTargetFileText);
+  });
+});
+
+ipc.answerRenderer<{ start: IJSXSource }>('open-file', body => {
+  launchEditor(body.start.fileName, body.start.lineNumber);
+});

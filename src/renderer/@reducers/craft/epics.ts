@@ -1,4 +1,4 @@
-import axios from 'axios';
+import * as ipc from 'electron-better-ipc';
 import { combineEpics } from 'redux-observable';
 import { bindCallback, empty, fromEvent, merge } from 'rxjs';
 import { filter, flatMap, mergeMap } from 'rxjs/operators';
@@ -33,7 +33,7 @@ const epics: IEpic[] = [
         } = $state.value;
 
         if (start !== end) {
-          axios.put('/api/drag-drop', {
+          ipc.callMain('drag-drop', {
             start,
             end,
           });
