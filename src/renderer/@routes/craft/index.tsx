@@ -221,7 +221,7 @@ class HomeRoute extends React.Component<{}, IState> {
         <>
           <LeftPanel>
             {Object.keys(this.state.nodeMap).map(title => {
-              const { depth } = this.state.nodeMap[title];
+              const { depth, node } = this.state.nodeMap[title];
 
               return (
                 <TreeRow
@@ -230,7 +230,7 @@ class HomeRoute extends React.Component<{}, IState> {
                   title={title}
                   onClick={() => this.selectOverlay(title)}
                 >
-                  {depth}
+                  {node._debugSource!.tagName}
                 </TreeRow>
               );
             })}

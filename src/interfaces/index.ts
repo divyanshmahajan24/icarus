@@ -28,7 +28,12 @@ export interface IFiberNode {
   _debugID: number;
   _debugIsCurrentlyTiming: boolean;
   _debugOwner: null;
-  _debugSource: null;
+  _debugSource?: {
+    lineNumber: number;
+    columnNumber: number;
+    fileName: string;
+    tagName: string;
+  };
 }
 
 export interface IFiberRoot {
