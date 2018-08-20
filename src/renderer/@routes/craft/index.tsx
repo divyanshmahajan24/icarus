@@ -3,7 +3,6 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import styled from 'react-emotion';
 
-import { IIcarus } from '@interfaces';
 import { IRootState } from '@reducers';
 import craftActions from '@reducers/craft/actions';
 import Droppable from '@services/droppable';
@@ -45,7 +44,6 @@ type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 interface IState {
   selectedOverlay?: string;
   selectedStyle?: CSSStyleRule;
-  Icarus?: IIcarus;
 }
 
 class HomeRoute extends React.Component<IProps, IState> {

@@ -6,6 +6,7 @@ declare global {
     __REACT_DEVTOOLS_GLOBAL_HOOK__: {
       inject: (renderer: IRenderer) => void;
       onCommitFiberRoot: (rendererId: string, fiberRoot: IFiberRoot) => void;
+      onCommitFiberUnmount: any;
       supportsFiber: boolean;
     };
   }
@@ -43,6 +44,7 @@ window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = {
       onFiberRoot({ rendererId, renderer, fiberRoot });
     }
   },
+  onCommitFiberUnmount: () => null,
 };
 
 export default setup;
