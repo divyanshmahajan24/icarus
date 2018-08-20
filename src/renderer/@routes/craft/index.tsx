@@ -3,9 +3,12 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import styled from 'react-emotion';
 
-import { IFiberNode, IFiberRoot, IRenderer } from '@interfaces';
+import { IIcarus } from '@interfaces';
+import { IRootState } from '@reducers';
+import craftActions from '@reducers/craft/actions';
 import Droppable from '@services/droppable';
-import setupDevToolsHook from '@services/setupDevToolsHook';
+import { connect } from 'react-redux';
+import { getClassNameList, getAffectedStyles } from '@utils';
 
 const Container = styled('div')`
   display: flex;
@@ -37,60 +40,19 @@ const TreeRow = styled('div')<{ depth: number }>`
   cursor: pointer;
 `;
 
-const getTitle = (node: any) =>
-  node._debugSource && Object.values(node._debugSource).join(',');
-
-const getClassNameList = (nativeNode: HTMLElement) =>
-  Array.from(nativeNode.classList);
-
-const getAffectedStyles = (selectorText: string) => {
-  const styles: CSSStyleRule[] = [];
-
-  Array.from(document.styleSheets).forEach(styleSheet => {
-    Array.from((styleSheet as any).cssRules).forEach((cssRule: any) => {
-      if (
-        cssRule.selectorText &&
-        cssRule.selectorText.includes(selectorText) &&
-        cssRule.style.length
-      ) {
-        styles.push(cssRule);
-      }
-    });
-  });
-
-  return styles;
-};
+type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
 interface IState {
-  nodeMap: Record<
-    string,
-    { node: IFiberNode; nativeNode: HTMLElement; depth: number }
-  >;
-  renderer?: IRenderer;
-  fiberRoot?: IFiberRoot;
   selectedOverlay?: string;
   selectedStyle?: CSSStyleRule;
-  Icarus?: {
-    workspace: Array<{ meta: { title: string; instances: JSX.Element[] } }>;
-    ContextProvider: React.ComponentType;
-  };
+  Icarus?: IIcarus;
 }
 
-class HomeRoute extends React.Component<{}, IState> {
-  private craftingDivRef: React.RefObject<HTMLDivElement>;
-
-  constructor(props: {}) {
-    super(props);
-
-    this.craftingDivRef = React.createRef();
-
-    this.state = {
-      nodeMap: {},
-    };
-  }
+class HomeRoute extends React.Component<IProps, IState> {
+  public state: IState = {};
 
   private handleDelete = () => {
-    const { node } = this.state.nodeMap[this.state.selectedOverlay!];
+    const { node } = this.props.nodeMap[this.state.selectedOverlay!];
 
     ipc.callMain('remove', {
       start: node._debugSource,
@@ -101,7 +63,7 @@ class HomeRoute extends React.Component<{}, IState> {
     this.setState({ selectedOverlay: title });
 
     if (title) {
-      const { nativeNode } = this.state.nodeMap[title!];
+      const { nativeNode } = this.props.nodeMap[title!];
 
       const classNameList = getClassNameList(nativeNode);
 
@@ -124,33 +86,6 @@ class HomeRoute extends React.Component<{}, IState> {
     }
   };
 
-  private walkTree(root: any, fn: (node: any, depth: number) => void) {
-    let node = root;
-
-    let depth = 0;
-
-    while (true) {
-      fn(node, depth);
-
-      if (node.child) {
-        node = node.child;
-        depth += 1;
-        continue;
-      }
-      if (node === root) {
-        return;
-      }
-      while (!node.sibling) {
-        if (!node.return || node.return === root) {
-          return;
-        }
-        node = node.return;
-        depth -= 1;
-      }
-      node = node.sibling;
-    }
-  }
-
   public componentWillUnmount() {
     document.removeEventListener<'keydown'>(
       'keydown',
@@ -165,49 +100,9 @@ class HomeRoute extends React.Component<{}, IState> {
   };
 
   public componentDidMount() {
+    this.props.craftingTableMounted();
+
     document.addEventListener<'keydown'>('keydown', this.keydownEventListener);
-
-    document.addEventListener('icarus-build', e => {
-      const event = e as CustomEvent<IState['Icarus']>;
-
-      const Icarus = event.detail!;
-
-      const craftingComponentInstance = Icarus.workspace[0].meta.instances[0];
-
-      setupDevToolsHook(({ fiberRoot, renderer }) => {
-        if (
-          renderer!.findHostInstanceByFiber(fiberRoot!.current) ===
-          this.craftingDivRef.current!.children[0]
-        ) {
-          const nodeMap: IState['nodeMap'] = {};
-
-          this.walkTree(fiberRoot!.current, (node, depth) => {
-            const title = getTitle(node);
-
-            const nativeNode = renderer!.findHostInstanceByFiber(
-              node,
-            ) as HTMLElement;
-
-            if (title) {
-              nodeMap[title] = { node, nativeNode, depth };
-            }
-          });
-
-          this.setState({
-            nodeMap,
-            renderer,
-            fiberRoot,
-          });
-        }
-      });
-
-      ReactDOM.render(
-        <Icarus.ContextProvider>
-          {craftingComponentInstance}
-        </Icarus.ContextProvider>,
-        this.craftingDivRef.current,
-      );
-    });
 
     const script = document.createElement('script');
     script.src = 'http://localhost:9889/app.js';
@@ -220,8 +115,8 @@ class HomeRoute extends React.Component<{}, IState> {
       <Container>
         <>
           <LeftPanel>
-            {Object.keys(this.state.nodeMap).map(title => {
-              const { depth, node } = this.state.nodeMap[title];
+            {Object.keys(this.props.nodeMap).map(title => {
+              const { depth, node } = this.props.nodeMap[title];
 
               return (
                 <TreeRow
@@ -236,42 +131,12 @@ class HomeRoute extends React.Component<{}, IState> {
             })}
           </LeftPanel>
           <CraftingComponentWrapper onClick={() => this.selectOverlay()}>
-            <div ref={this.craftingDivRef} />
-            {/* <StyleInspectorWrapper>
-                {this.state.selectedStyle && (
-                  <div>
-                    {Array.from(this.state.selectedStyle.style).map(label => (
-                      <div key={label}>
-                        {label}:{' '}
-                        {this.state.selectedStyle!.style.getPropertyValue(
-                          label,
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </StyleInspectorWrapper> */}
+            <div ref={this.props.craftingDivRef} />
           </CraftingComponentWrapper>
-          {/* <RightContainer>
-              {Object.values(Icarus.workspace)
-                .filter(x => x.meta)
-                .map(x => (
-                  <ComponentListingContainer key={x.meta!.title}>
-                    {x.meta!.title}
-                    <ComponentListingList>
-                      {x.meta!.instances.map((instance, i) => (
-                        <ComponentListingComponentWrapper key={i}>
-                          <Droppable>{instance}</Droppable>
-                        </ComponentListingComponentWrapper>
-                      ))}
-                    </ComponentListingList>
-                  </ComponentListingContainer>
-                ))}
-            </RightContainer> */}
           {ReactDOM.createPortal(
             <>
-              {Object.keys(this.state.nodeMap).map(title => {
-                const { node, nativeNode } = this.state.nodeMap[title];
+              {Object.keys(this.props.nodeMap).map(title => {
+                const { node, nativeNode } = this.props.nodeMap[title];
 
                 if (nativeNode.getBoundingClientRect && node._debugSource) {
                   const rect = nativeNode.getBoundingClientRect();
@@ -317,4 +182,18 @@ class HomeRoute extends React.Component<{}, IState> {
   }
 }
 
-export default HomeRoute;
+const mapStateToProps = (state: IRootState) => ({
+  craftingDivRef: state.craft.craftingDivRef,
+  nodeMap: state.craft.nodeMap,
+  renderer: state.craft.renderer,
+  fiberRoot: state.craft.fiberRoot,
+});
+
+const mapDispatchToProps = {
+  craftingTableMounted: craftActions.craftingTableMounted,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(HomeRoute);

@@ -1,12 +1,16 @@
 import actionCreatorFactory from 'typescript-fsa';
 
-import { IJSXSource } from '@interfaces';
+import { IFiberRoot, INodeMap, IRenderer } from '@interfaces';
 
-const actionCreator = actionCreatorFactory('HOME');
+const actionCreator = actionCreatorFactory('CRAFT');
 
 const actions = {
-  updateDragStartLocation: actionCreator<IJSXSource>('updateDragStartLocation'),
-  updateDragEndLocation: actionCreator<IJSXSource>('updateDragEndLocation'),
+  craftingTableMounted: actionCreator('craftingTableMounted'),
+  afterCommitRoot: actionCreator<{
+    nodeMap: INodeMap;
+    renderer: IRenderer;
+    fiberRoot: IFiberRoot;
+  }>('afterCommitRoot'),
 };
 
 export default actions;

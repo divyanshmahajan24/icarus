@@ -2,7 +2,7 @@ import actionCreatorFactory from 'typescript-fsa';
 
 import { IJSXSource } from '@interfaces';
 
-const actionCreator = actionCreatorFactory('HOME');
+const actionCreator = actionCreatorFactory('DRAG');
 
 const actions = {
   updateDragStartLocation: actionCreator<IJSXSource>('updateDragStartLocation'),

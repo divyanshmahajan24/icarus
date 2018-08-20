@@ -62,3 +62,13 @@ export interface IIcarus {
   workspace: Array<{ meta: { title: string; instances: JSX.Element[] } }>;
   ContextProvider: React.ComponentType;
 }
+
+export type INodeMap = Record<
+  string,
+  { node: IFiberNode; nativeNode: HTMLElement; depth: number }
+>;
+
+export interface IIcarus {
+  workspace: Array<{ meta: { title: string; instances: JSX.Element[] } }>;
+  ContextProvider: React.ComponentType;
+}
