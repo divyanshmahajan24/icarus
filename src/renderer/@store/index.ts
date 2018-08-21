@@ -1,5 +1,5 @@
 import { applyMiddleware, createStore, Middleware, Store } from 'redux';
-import ReduxLogger from 'redux-logger';
+import { createLogger } from 'redux-logger';
 import { createEpicMiddleware } from 'redux-observable';
 
 import { IRootAction, IRootState, rootEpic, rootReducer } from '@reducers';
@@ -10,7 +10,8 @@ const configureStore = (): Store<IRootState, IRootAction> => {
   const middlewares: Middleware[] = [epicMiddleware];
 
   if (process.env.NODE_ENV !== 'production') {
-    middlewares.push(ReduxLogger);
+    const reduxLogger = createLogger({ collapsed: true });
+    middlewares.push(reduxLogger);
   }
 
   const s = createStore<IRootState, IRootAction, any, any>(

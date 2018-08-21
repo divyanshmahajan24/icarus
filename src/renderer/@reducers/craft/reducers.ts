@@ -30,6 +30,14 @@ const reducer = reducerWithInitialState<IReducerState>(INITIAL_STATE)
     ...state,
     ...payload,
   }))
+  .case(actions.setSelectedOverlay, (state, payload) => ({
+    ...state,
+    selectedOverlay: payload,
+  }))
+  .case(actions.setSelectedStyle, (state, payload) => ({
+    ...state,
+    selectedStyle: payload,
+  }))
   .build();
 
 export default reducer;

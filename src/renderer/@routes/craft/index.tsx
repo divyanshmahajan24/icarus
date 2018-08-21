@@ -7,7 +7,6 @@ import { IRootState } from '@reducers';
 import craftActions from '@reducers/craft/actions';
 import Droppable from '@services/droppable';
 import { connect } from 'react-redux';
-import { getClassNameList, getAffectedStyles } from '@utils';
 
 const Container = styled('div')`
   display: flex;
@@ -41,71 +40,13 @@ const TreeRow = styled('div')<{ depth: number }>`
 
 type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
-interface IState {
-  selectedOverlay?: string;
-  selectedStyle?: CSSStyleRule;
-}
-
-class HomeRoute extends React.Component<IProps, IState> {
-  public state: IState = {};
-
-  private handleDelete = () => {
-    const { node } = this.props.nodeMap[this.state.selectedOverlay!];
-
-    ipc.callMain('remove', {
-      start: node._debugSource,
-    });
-  };
-
-  private selectOverlay = (title?: string) => {
-    this.setState({ selectedOverlay: title });
-
-    if (title) {
-      const { nativeNode } = this.props.nodeMap[title!];
-
-      const classNameList = getClassNameList(nativeNode);
-
-      if (classNameList.length) {
-        classNameList.forEach(className => {
-          const cssStyleRuleList = getAffectedStyles(className);
-
-          cssStyleRuleList.forEach(cssStyleRule => {
-            if (cssStyleRule.style.length) {
-              (window as any).selectedStyle = cssStyleRule;
-              this.setState({ selectedStyle: cssStyleRule });
-            }
-          });
-        });
-      } else {
-        this.setState({ selectedStyle: undefined });
-      }
-    } else {
-      this.setState({ selectedStyle: undefined });
-    }
-  };
-
+class HomeRoute extends React.Component<IProps> {
   public componentWillUnmount() {
-    document.removeEventListener<'keydown'>(
-      'keydown',
-      this.keydownEventListener,
-    );
+    this.props.craftingTableUnmounted();
   }
-
-  private keydownEventListener = (e: KeyboardEvent) => {
-    if (e.keyCode === 8 && !e.repeat && this.state.selectedOverlay) {
-      this.handleDelete();
-    }
-  };
 
   public componentDidMount() {
     this.props.craftingTableMounted();
-
-    document.addEventListener<'keydown'>('keydown', this.keydownEventListener);
-
-    const script = document.createElement('script');
-    script.src = 'http://localhost:9889/app.js';
-
-    document.body.appendChild(script);
   }
 
   public render() {
@@ -121,14 +62,16 @@ class HomeRoute extends React.Component<IProps, IState> {
                   key={title}
                   depth={depth}
                   title={title}
-                  onClick={() => this.selectOverlay(title)}
+                  onClick={() => this.props.handleSelectOverlayOnClick(title)}
                 >
                   {node._debugSource!.tagName}
                 </TreeRow>
               );
             })}
           </LeftPanel>
-          <CraftingComponentWrapper onClick={() => this.selectOverlay()}>
+          <CraftingComponentWrapper
+            onClick={() => this.props.handleSelectOverlayOnClick(undefined)}
+          >
             <div ref={this.props.craftingDivRef} />
           </CraftingComponentWrapper>
           {ReactDOM.createPortal(
@@ -148,7 +91,7 @@ class HomeRoute extends React.Component<IProps, IState> {
                     width: rect.width + 'px',
                   };
 
-                  if (title === this.state.selectedOverlay) {
+                  if (title === this.props.selectedOverlay) {
                     divStyle.border = '1px solid blue';
                   }
 
@@ -159,7 +102,9 @@ class HomeRoute extends React.Component<IProps, IState> {
                           start: node._debugSource,
                         });
                       }}
-                      onClick={() => this.selectOverlay(title)}
+                      onClick={() =>
+                        this.props.handleSelectOverlayOnClick(title)
+                      }
                       source={node._debugSource}
                       key={title}
                       title={title}
@@ -185,10 +130,16 @@ const mapStateToProps = (state: IRootState) => ({
   nodeMap: state.craft.nodeMap,
   renderer: state.craft.renderer,
   fiberRoot: state.craft.fiberRoot,
+  selectedOverlay: state.craft.selectedOverlay,
+  selectedStyle: state.craft.selectedStyle,
 });
 
 const mapDispatchToProps = {
   craftingTableMounted: craftActions.craftingTableMounted,
+  craftingTableUnmounted: craftActions.craftingTableUnmounted,
+  setSelectedOverlay: craftActions.setSelectedOverlay,
+  setSelectedStyle: craftActions.setSelectedStyle,
+  handleSelectOverlayOnClick: craftActions.handleSelectOverlayOnClick,
 };
 
 export default connect(
