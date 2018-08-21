@@ -1,12 +1,10 @@
-import * as ipc from 'electron-better-ipc';
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 import styled from 'react-emotion';
+import { connect } from 'react-redux';
 
 import { IRootState } from '@reducers';
 import craftActions from '@reducers/craft/actions';
-import Droppable from '@services/droppable';
-import { connect } from 'react-redux';
+import OverlayLayer from '@containers/OverlayLayer';
 
 const Container = styled('div')`
   display: flex;
@@ -74,51 +72,7 @@ class HomeRoute extends React.Component<IProps> {
           >
             <div ref={this.props.craftingDivRef} />
           </CraftingComponentWrapper>
-          {ReactDOM.createPortal(
-            <>
-              {Object.keys(this.props.nodeMap).map(title => {
-                const { node, nativeNode } = this.props.nodeMap[title];
-
-                if (nativeNode.getBoundingClientRect && node._debugSource) {
-                  const rect = nativeNode.getBoundingClientRect();
-
-                  const divStyle: React.CSSProperties = {
-                    left: rect.left + 'px',
-                    right: rect.right + 'px',
-                    top: rect.top + 'px',
-                    bottom: rect.bottom + 'px',
-                    height: rect.height + 'px',
-                    width: rect.width + 'px',
-                  };
-
-                  if (title === this.props.selectedOverlay) {
-                    divStyle.border = '1px solid blue';
-                  }
-
-                  const div = (
-                    <Droppable
-                      onDoubleClick={() => {
-                        ipc.callMain('open-file', {
-                          start: node._debugSource,
-                        });
-                      }}
-                      onClick={() =>
-                        this.props.handleSelectOverlayOnClick(title)
-                      }
-                      source={node._debugSource}
-                      key={title}
-                      title={title}
-                      style={divStyle}
-                    />
-                  );
-
-                  return div;
-                }
-                return null;
-              })}
-            </>,
-            document.body,
-          )}
+          <OverlayLayer />
         </>
       </Container>
     );
@@ -130,7 +84,6 @@ const mapStateToProps = (state: IRootState) => ({
   nodeMap: state.craft.nodeMap,
   renderer: state.craft.renderer,
   fiberRoot: state.craft.fiberRoot,
-  selectedOverlay: state.craft.selectedOverlay,
   selectedStyle: state.craft.selectedStyle,
 });
 
