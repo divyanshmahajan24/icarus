@@ -1,4 +1,5 @@
 import * as ipc from 'electron-better-ipc';
+import styled from 'react-emotion';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
@@ -8,6 +9,15 @@ import craftActions from '@reducers/craft/actions';
 import Droppable from '@services/droppable';
 
 type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
+
+const Overlay = styled(Droppable)`
+  position: fixed;
+
+  &:hover {
+    border: 1px solid black;
+    border-style: dotted;
+  }
+`;
 
 const OverlayLayer: React.SFC<IProps> = props => {
   return (
@@ -34,7 +44,7 @@ const OverlayLayer: React.SFC<IProps> = props => {
               }
 
               const div = (
-                <Droppable
+                <Overlay
                   onDoubleClick={() => {
                     ipc.callMain('open-file', {
                       start: node._debugSource,

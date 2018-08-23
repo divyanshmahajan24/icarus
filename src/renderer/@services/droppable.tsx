@@ -26,16 +26,6 @@ const Wrapper = styled('div')`
         : ''
     }
   `};
-
-  ${props =>
-    !props.children
-      ? `position: fixed;
-
-        &:hover {
-          border: 1px solid black;
-          border-style: dotted;
-        }`
-      : ''};
 `;
 
 interface IDndSourceProps {
