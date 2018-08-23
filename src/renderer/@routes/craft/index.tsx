@@ -15,9 +15,23 @@ const Container = styled('div')`
 `;
 
 const LeftPanel = styled('div')`
-  width: 300px;
+  width: 400px;
   background-color: #dedede;
   overflow-y: scroll;
+`;
+
+const RightPanel = styled('div')`
+  width: 400px;
+  overflow-y: scroll;
+`;
+
+const ComponentCard = styled('div')`
+  margin-bottom: 32px;
+`;
+
+const ComponentTitle = styled('div')`
+  font-weight: 600;
+  font-size: 18px;
 `;
 
 const CraftingComponentWrapper = styled('div')`
@@ -75,19 +89,19 @@ class HomeRoute extends React.Component<IProps> {
           </CraftingComponentWrapper>
           <OverlayLayer />
         </>
-        <div>
+        <RightPanel style={{ width: 400, padding: 10, overflowY: 'auto' }}>
           {this.props.Icarus &&
             this.props.Icarus.workspace.map(a => (
-              <div key={a.title}>
-                {a.title}
+              <ComponentCard key={a.title}>
+                <ComponentTitle>{a.title}</ComponentTitle>
                 <div>
                   {a.instances.map((instance, i) => (
                     <Droppable key={i}>{instance}</Droppable>
                   ))}
                 </div>
-              </div>
+              </ComponentCard>
             ))}
-        </div>
+        </RightPanel>
       </Container>
     );
   }
