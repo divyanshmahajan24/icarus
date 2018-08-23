@@ -41,6 +41,14 @@ const config: webpack.Configuration = {
           },
         ],
       },
+      {
+        test: /\.(png|jpg|gif)$/,
+        loader: [
+          {
+            loader: 'file-loader',
+          },
+        ],
+      },
     ],
   },
   resolve: {

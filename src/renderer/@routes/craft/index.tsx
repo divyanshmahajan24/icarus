@@ -15,13 +15,13 @@ const Container = styled('div')`
 
 const LeftPanel = styled('div')`
   width: 300px;
-  background-color: white;
+  background-color: #dedede;
   overflow-y: scroll;
 `;
 
 const CraftingComponentWrapper = styled('div')`
   padding: 20px;
-  background-color: #dedede;
+  background-color: rgba(222, 222, 222, 0.3);
   width: 100%;
   display: flex;
   justify-content: center;

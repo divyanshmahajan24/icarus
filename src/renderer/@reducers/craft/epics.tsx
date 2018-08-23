@@ -55,7 +55,7 @@ const epics: IEpic[] = [
               const Icarus = event.detail;
 
               const craftingComponentInstance =
-                Icarus.workspace[0].meta.instances[0];
+                Icarus.workspace[0].instances[0];
 
               const {
                 value: {

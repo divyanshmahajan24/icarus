@@ -1,6 +1,11 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
+import AlbumArt from '../AlbumArt';
+import Seeker from '../Seeker';
+import NavigationBar from '../NavigationBar';
+import PlayControl from '../PlayControl';
+
 const Container = styled.div`
   height: 600px;
   width: 337.5px;
@@ -9,44 +14,10 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
-const NavigationBar = styled.div`
-  height: 19px;
-`;
-
 const AlbumArtWrapper = styled.div`
   width: 337.5px;
   height: 337.5px;
   padding: 13px;
-`;
-
-const AlbumArt = styled.img`
-  height: 100%;
-  width: 100%;
-  box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.38);
-  border-radius: 8px;
-`;
-
-const SeekContainer = styled.div`
-  padding: 0 18px;
-  margin-bottom: 9px;
-`;
-
-const SeekLineWrapper = styled.div`
-  height: 25px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`;
-
-const SeekLine = styled.div`
-  height: 2px;
-  background-color: #dedede;
-`;
-
-const SeekTimelineWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  font-size: 9px;
 `;
 
 const BottomFlexWrapper = styled.div`
@@ -99,37 +70,6 @@ const ShuffleIcon = styled.i.attrs({
   color: grey;
 `;
 
-const PauseIconCircle = styled.div`
-  border-radius: 50%;
-  height: 42px;
-  width: 42px;
-  box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.38);
-  background-color: #6af0af;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 16px;
-`;
-
-const PauseIcon = styled.i.attrs({
-  children: 'pause',
-  className: 'material-icons',
-})`
-  font-size: 24px;
-`;
-
-const NextPrevIcon = styled.i.attrs({
-  className: 'material-icons',
-})`
-  font-size: 28px;
-  color: grey;
-`;
-
-const PlayIconsCollection = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
 const BottomRow = styled.div`
   display: flex;
   justify-content: space-between;
@@ -177,15 +117,7 @@ const Page = () => (
     <AlbumArtWrapper>
       <AlbumArt src="https://images-na.ssl-images-amazon.com/images/I/819e05qxPEL._SX522_.jpg" />
     </AlbumArtWrapper>
-    <SeekContainer>
-      <SeekLineWrapper>
-        <SeekLine />
-      </SeekLineWrapper>
-      <SeekTimelineWrapper>
-        <div>1:08</div>
-        <div>5:21</div>
-      </SeekTimelineWrapper>
-    </SeekContainer>
+    <Seeker />
     <BottomFlexWrapper>
       <SongDetailsWrapper>
         <SongTitle>All I Know (feat. Future)</SongTitle>
@@ -193,13 +125,7 @@ const Page = () => (
       </SongDetailsWrapper>
       <PlayControlRow>
         <RepeatIcon />
-        <PlayIconsCollection>
-          <NextPrevIcon>skip_previous</NextPrevIcon>
-          <PauseIconCircle>
-            <PauseIcon />
-          </PauseIconCircle>
-          <NextPrevIcon>skip_next</NextPrevIcon>
-        </PlayIconsCollection>
+        <PlayControl />
         <ShuffleIcon />
       </PlayControlRow>
       <BottomRow>

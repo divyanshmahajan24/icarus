@@ -7,3 +7,8 @@ declare module 'electron-better-ipc' {
   };
   export = x;
 }
+
+declare module '*.png' {
+  const x: any;
+  export = x;
+}
