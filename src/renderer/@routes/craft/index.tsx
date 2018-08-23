@@ -91,12 +91,17 @@ class HomeRoute extends React.Component<IProps> {
         </>
         <RightPanel style={{ width: 400, padding: 10, overflowY: 'auto' }}>
           {this.props.Icarus &&
-            this.props.Icarus.workspace.map(a => (
+            this.props.Icarus.workspace.map((a, i) => (
               <ComponentCard key={a.title}>
                 <ComponentTitle>{a.title}</ComponentTitle>
                 <div>
-                  {a.instances.map((instance, i) => (
-                    <Droppable key={i}>{instance}</Droppable>
+                  {a.instances.map((instance, j) => (
+                    <Droppable
+                      onClick={() => this.props.setSelectedComponent([i, j])}
+                      key={j}
+                    >
+                      {instance}
+                    </Droppable>
                   ))}
                 </div>
               </ComponentCard>
@@ -122,6 +127,7 @@ const mapDispatchToProps = {
   setSelectedOverlay: craftActions.setSelectedOverlay,
   setSelectedStyle: craftActions.setSelectedStyle,
   handleSelectOverlayOnClick: craftActions.handleSelectOverlayOnClick,
+  setSelectedComponent: craftActions.setSelectedComponent,
 };
 
 export default connect(

@@ -12,6 +12,9 @@ const actions = {
     renderer: IRenderer;
     fiberRoot: IFiberRoot;
   }>('afterCommitRoot'),
+  setSelectedComponent: actionCreator<[number, number] | undefined>(
+    'setSelectedComponent',
+  ),
   updateIcarus: actionCreator<IIcarus>('updateIcarus'),
   setSelectedOverlay: actionCreator<string | undefined>('setSelectedOverlay'),
   setSelectedStyle: actionCreator<CSSStyleRule | undefined>('setSelectedStyle'),

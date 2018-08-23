@@ -20,6 +20,33 @@ const epics: IEpic[] = [
     ),
   (action$, $state) =>
     action$.pipe(
+      filter(actions.setSelectedComponent.match),
+      mergeMap(({ payload: selectedComponentInstance }) => {
+        const {
+          craft: { Icarus, craftingDivRef },
+        } = $state.value;
+
+        if (!selectedComponentInstance || !Icarus) {
+          return empty();
+        }
+
+        const craftingComponentInstance =
+          Icarus.workspace[selectedComponentInstance[0]].instances[
+            selectedComponentInstance[1]
+          ];
+
+        ReactDOM.render(
+          <Icarus.ContextProvider>
+            {craftingComponentInstance}
+          </Icarus.ContextProvider>,
+          craftingDivRef.current,
+        );
+
+        return empty();
+      }),
+    ),
+  (action$, $state) =>
+    action$.pipe(
       filter(actions.craftingTableMounted.match),
       mergeMap(() => {
         const script = document.createElement('script');
@@ -54,12 +81,9 @@ const epics: IEpic[] = [
 
               const Icarus = event.detail;
 
-              const craftingComponentInstance =
-                Icarus.workspace[0].instances[0];
-
               const {
                 value: {
-                  craft: { craftingDivRef },
+                  craft: { craftingDivRef, selectedComponentInstance },
                 },
               } = $state;
 
@@ -104,12 +128,19 @@ const epics: IEpic[] = [
                 },
               );
 
-              ReactDOM.render(
-                <Icarus.ContextProvider>
-                  {craftingComponentInstance}
-                </Icarus.ContextProvider>,
-                craftingDivRef.current,
-              );
+              if (selectedComponentInstance) {
+                const craftingComponentInstance =
+                  Icarus.workspace[selectedComponentInstance[0]].instances[
+                    selectedComponentInstance[1]
+                  ];
+
+                ReactDOM.render(
+                  <Icarus.ContextProvider>
+                    {craftingComponentInstance}
+                  </Icarus.ContextProvider>,
+                  craftingDivRef.current,
+                );
+              }
 
               return merge(subject, of(actions.updateIcarus(Icarus)));
             }),

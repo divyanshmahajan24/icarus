@@ -15,11 +15,16 @@ export interface IReducerState {
   selectedStyle?: CSSStyleRule;
   Icarus?: IIcarus;
   craftingDivRef: React.RefObject<HTMLDivElement>;
+  /**
+   * first number is component index, second number is instance index
+   */
+  selectedComponentInstance?: [number, number];
 }
 
 const INITIAL_STATE: IReducerState = {
   nodeMap: {},
   craftingDivRef: React.createRef(),
+  selectedComponentInstance: [0, 0],
 };
 
 const reducer = reducerWithInitialState<IReducerState>(INITIAL_STATE)
@@ -49,6 +54,13 @@ const reducer = reducerWithInitialState<IReducerState>(INITIAL_STATE)
     (state, payload): IReducerState => ({
       ...state,
       Icarus: payload,
+    }),
+  )
+  .case(
+    actions.setSelectedComponent,
+    (state, payload): IReducerState => ({
+      ...state,
+      selectedComponentInstance: payload,
     }),
   )
   .build();
