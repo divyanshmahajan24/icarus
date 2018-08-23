@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { IRootState } from '@reducers';
 import craftActions from '@reducers/craft/actions';
 import OverlayLayer from '@containers/OverlayLayer';
+import Droppable from '@services/droppable';
 
 const Container = styled('div')`
   display: flex;
@@ -74,6 +75,19 @@ class HomeRoute extends React.Component<IProps> {
           </CraftingComponentWrapper>
           <OverlayLayer />
         </>
+        <div>
+          {this.props.Icarus &&
+            this.props.Icarus.workspace.map(a => (
+              <div key={a.title}>
+                {a.title}
+                <div>
+                  {a.instances.map((instance, i) => (
+                    <Droppable key={i}>{instance}</Droppable>
+                  ))}
+                </div>
+              </div>
+            ))}
+        </div>
       </Container>
     );
   }
@@ -85,6 +99,7 @@ const mapStateToProps = (state: IRootState) => ({
   renderer: state.craft.renderer,
   fiberRoot: state.craft.fiberRoot,
   selectedStyle: state.craft.selectedStyle,
+  Icarus: state.craft.Icarus,
 });
 
 const mapDispatchToProps = {

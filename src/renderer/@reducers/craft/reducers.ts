@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { reducerWithInitialState } from 'typescript-fsa-reducers';
 
-import { IFiberNode, IFiberRoot, IRenderer } from '@interfaces';
+import { IFiberNode, IFiberRoot, IRenderer, IIcarus } from '@interfaces';
 import actions from './actions';
 
 export interface IReducerState {
@@ -13,10 +13,7 @@ export interface IReducerState {
   fiberRoot?: IFiberRoot;
   selectedOverlay?: string;
   selectedStyle?: CSSStyleRule;
-  Icarus?: {
-    workspace: Array<{ meta: { title: string; instances: JSX.Element[] } }>;
-    ContextProvider: React.ComponentType;
-  };
+  Icarus?: IIcarus;
   craftingDivRef: React.RefObject<HTMLDivElement>;
 }
 
@@ -26,18 +23,34 @@ const INITIAL_STATE: IReducerState = {
 };
 
 const reducer = reducerWithInitialState<IReducerState>(INITIAL_STATE)
-  .case(actions.afterCommitRoot, (state, payload) => ({
-    ...state,
-    ...payload,
-  }))
-  .case(actions.setSelectedOverlay, (state, payload) => ({
-    ...state,
-    selectedOverlay: payload,
-  }))
-  .case(actions.setSelectedStyle, (state, payload) => ({
-    ...state,
-    selectedStyle: payload,
-  }))
+  .case(
+    actions.afterCommitRoot,
+    (state, payload): IReducerState => ({
+      ...state,
+      ...payload,
+    }),
+  )
+  .case(
+    actions.setSelectedOverlay,
+    (state, payload): IReducerState => ({
+      ...state,
+      selectedOverlay: payload,
+    }),
+  )
+  .case(
+    actions.setSelectedStyle,
+    (state, payload): IReducerState => ({
+      ...state,
+      selectedStyle: payload,
+    }),
+  )
+  .case(
+    actions.updateIcarus,
+    (state, payload): IReducerState => ({
+      ...state,
+      Icarus: payload,
+    }),
+  )
   .build();
 
 export default reducer;

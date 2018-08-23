@@ -2,7 +2,7 @@ import * as ipc from 'electron-better-ipc';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { combineEpics } from 'redux-observable';
-import { empty, fromEvent, BehaviorSubject, merge } from 'rxjs';
+import { empty, fromEvent, BehaviorSubject, merge, of } from 'rxjs';
 import { filter, mergeMap, map, takeUntil } from 'rxjs/operators';
 
 import { IIcarus, INodeMap, IFiberRoot, IRenderer } from '@interfaces';
@@ -111,7 +111,7 @@ const epics: IEpic[] = [
                 craftingDivRef.current,
               );
 
-              return subject;
+              return merge(subject, of(actions.updateIcarus(Icarus)));
             }),
           ),
         );
