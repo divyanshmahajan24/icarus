@@ -32,6 +32,9 @@ export const workspace = [
       <div style={{ width: 200, height: 200, padding: 20 }}>
         <AlbumArt src="https://images-na.ssl-images-amazon.com/images/I/819e05qxPEL._SX522_.jpg" />
       </div>,
+      <div style={{ width: 200, height: 200, padding: 20 }}>
+        <AlbumArt src="https://qph.fs.quoracdn.net/main-qimg-66ffaf4927cbb0d2cc501d595916c930.webp" />
+      </div>,
     ],
   },
   {

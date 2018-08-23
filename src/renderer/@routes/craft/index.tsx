@@ -34,6 +34,8 @@ const ComponentTitle = styled('div')`
   font-size: 18px;
 `;
 
+const ComponentInstanceContainer = styled('div')``;
+
 const CraftingComponentWrapper = styled('div')`
   padding: 20px;
   background-color: rgba(222, 222, 222, 0.3);
@@ -96,12 +98,13 @@ class HomeRoute extends React.Component<IProps> {
                 <ComponentTitle>{a.title}</ComponentTitle>
                 <div>
                   {a.instances.map((instance, j) => (
-                    <Droppable
-                      onClick={() => this.props.setSelectedComponent([i, j])}
-                      key={j}
-                    >
-                      {instance}
-                    </Droppable>
+                    <ComponentInstanceContainer key={j}>
+                      <Droppable
+                        onClick={() => this.props.setSelectedComponent([i, j])}
+                      >
+                        {instance}
+                      </Droppable>
+                    </ComponentInstanceContainer>
                   ))}
                 </div>
               </ComponentCard>
