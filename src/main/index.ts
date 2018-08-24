@@ -51,18 +51,22 @@ electron.app.on('activate', () => {
 ipc.answerRenderer<{ start: IJSXSource; end: IJSXSource }>(
   'drag-drop',
   body => {
-    dragDrop(body).then(newTargetFileText => {
-      writeFileAsync(body.end.fileName, newTargetFileText);
-    });
+    dragDrop(body)
+      .then(newTargetFileText => {
+        writeFileAsync(body.end.fileName, newTargetFileText);
+      })
+      .catch(console.error);
   },
 );
 
 ipc.answerRenderer<{ start: IJSXSource }>('remove', body => {
-  remove(body).then(newTargetFileText => {
-    writeFileAsync(body.start.fileName, newTargetFileText);
-  });
+  remove(body)
+    .then(newTargetFileText => {
+      writeFileAsync(body.start.fileName, newTargetFileText);
+    })
+    .catch(console.error);
 });
 
 ipc.answerRenderer<{ start: IJSXSource }>('open-file', body => {
-  launchEditor(body.start.fileName, body.start.lineNumber);
+  launchEditor(body.start.fileName, body.start.lineNumber).catch(console.error);
 });

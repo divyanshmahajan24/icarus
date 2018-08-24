@@ -2,11 +2,11 @@ import * as ts from 'typescript';
 import { IJSXSource } from '../interfaces';
 import { getInfo } from '../utils';
 
-export default (
+const findNode = <T extends ts.Node>(
   rootNode: ts.Node,
   target?: IJSXSource,
   predicate?: (node: ts.Node) => boolean,
-): ts.Node | undefined => {
+): T | undefined => {
   let resolvedNode;
 
   function _traverse(node: ts.Node) {
@@ -29,3 +29,5 @@ export default (
 
   return resolvedNode;
 };
+
+export default findNode;
