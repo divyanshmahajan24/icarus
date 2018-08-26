@@ -2,8 +2,8 @@ import * as ipc from 'electron-better-ipc';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { combineEpics } from 'redux-observable';
-import { empty, fromEvent, BehaviorSubject, merge, of } from 'rxjs';
-import { filter, mergeMap, map, takeUntil } from 'rxjs/operators';
+import { empty, fromEvent, BehaviorSubject, merge, of, from } from 'rxjs';
+import { filter, mergeMap, takeUntil } from 'rxjs/operators';
 
 import { IIcarus, INodeMap, IFiberRoot, IRenderer } from '@interfaces';
 import { IEpic } from '@reducers';
@@ -13,10 +13,35 @@ import { walkTree, getTitle } from '@utils';
 import { actions } from './';
 
 const epics: IEpic[] = [
-  action$ =>
+  (action$, state$) =>
     action$.pipe(
       filter(actions.handleSelectOverlayOnClick.match),
-      map(({ payload: title }) => actions.setSelectedOverlay(title)),
+      mergeMap(({ payload: title }) => {
+        const {
+          craft: { nodeMap },
+        } = state$.value;
+
+        if (!title) {
+          return empty();
+        }
+
+        const { node } = nodeMap[title];
+
+        return merge(
+          of(actions.setSelectedOverlay(title)),
+          from(
+            ipc.callMain('get-styles', {
+              start: node._debugSource,
+            }),
+          ).pipe(
+            mergeMap(response => {
+              console.log(response);
+
+              return empty();
+            }),
+          ),
+        );
+      }),
     ),
   (action$, $state) =>
     action$.pipe(

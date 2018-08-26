@@ -73,5 +73,5 @@ ipc.answerRenderer<{ start: IJSXSource }>('open-file', body => {
 });
 
 ipc.answerRenderer<{ start: IJSXSource }>('get-styles', body => {
-  getStyles(body.start).catch(console.error);
+  return getStyles(body.start).catch(console.error);
 });

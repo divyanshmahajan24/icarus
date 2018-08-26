@@ -21,10 +21,22 @@ function getStyles(
         /* setParentNodes */ true,
       );
 
-      const sourceNode = findNode(sourceFile, start); /*? $.getText() */
+      const sourceNode = findNode<ts.JsxElement | ts.JsxSelfClosingElement>(
+        sourceFile,
+        start,
+      ); /*? $.getText() */
 
       if (sourceNode) {
-        const text = getTemplateText(sourceFile, sourceNode.getText());
+        let text;
+
+        if (ts.isJsxElement(sourceNode)) {
+          text = getTemplateText(
+            sourceFile,
+            sourceNode.openingElement.tagName.getText(),
+          );
+        } else {
+          text = getTemplateText(sourceFile, sourceNode.tagName.getText());
+        }
 
         if (text) {
           const result = text
@@ -48,13 +60,13 @@ function getStyles(
     });
 }
 
-if (!module.parent) {
-  getStyles({
-    fileName:
-      '/Users/atifafzal/scratch/personal/icarus/workspace/src/components/Seeker/index.tsx',
-    lineNumber: 30,
-    columnNumber: 4,
-  });
-}
+// if (!module.parent) {
+//   getStyles({
+//     fileName:
+//       '/Users/atifafzal/scratch/personal/icarus/workspace/src/components/Seeker/index.tsx',
+//     lineNumber: 30,
+//     columnNumber: 4,
+//   });
+// }
 
 export default getStyles;
