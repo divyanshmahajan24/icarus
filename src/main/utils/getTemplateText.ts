@@ -18,12 +18,18 @@ const getTemplateText = (
   const initializer = (variableDeclaration as ts.VariableDeclaration)
     .initializer;
 
-  if (
-    initializer &&
-    ts.isTaggedTemplateExpression(initializer) &&
-    ts.isNoSubstitutionTemplateLiteral(initializer.template)
-  ) {
-    return initializer.template.text;
+  if (initializer && ts.isTaggedTemplateExpression(initializer)) {
+    if (ts.isTemplateExpression(initializer.template)) {
+      return (
+        initializer.template.head.text +
+        initializer.template.templateSpans
+          .filter(span => ts.isTemplateMiddleOrTemplateTail(span.literal))
+          .map(x => x.literal.text)
+          .join('')
+      );
+    }
+
+    return initializer.template.getText();
   }
 
   return;
