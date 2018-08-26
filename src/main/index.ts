@@ -7,6 +7,7 @@ import { promisify } from 'util';
 
 import dragDrop from './controllers/dragDrop';
 import remove from './controllers/remove';
+import getStyles from './controllers/getStyles';
 
 const writeFileAsync = promisify(fs.writeFile);
 
@@ -69,4 +70,8 @@ ipc.answerRenderer<{ start: IJSXSource }>('remove', body => {
 
 ipc.answerRenderer<{ start: IJSXSource }>('open-file', body => {
   launchEditor(body.start.fileName, body.start.lineNumber).catch(console.error);
+});
+
+ipc.answerRenderer<{ start: IJSXSource }>('get-styles', body => {
+  getStyles(body.start).catch(console.error);
 });

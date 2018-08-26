@@ -29,7 +29,7 @@ const getTemplateText = (
       );
     }
 
-    return initializer.template.getText();
+    return initializer.template.text;
   }
 
   return;

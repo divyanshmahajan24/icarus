@@ -8,11 +8,9 @@ import getTemplateText from '../utils/getTemplateText';
 
 const readFileAsync = promisify(readFile);
 
-function getStyles({
-  start,
-}: {
-  start: IJSXSource;
-}): Promise<Array<Record<string, string>> | undefined> {
+function getStyles(
+  start: IJSXSource,
+): Promise<Record<string, string> | undefined> {
   return readFileAsync(start.fileName)
     .then(R.toString)
     .then(sourceText => {
@@ -37,7 +35,10 @@ function getStyles({
               const y = x.split(':');
 
               return { [y[0].trim()]: y[1].trim() };
-            });
+            })
+            .reduce((ob, x) => {
+              return { ...ob, ...x };
+            }, {});
 
           return result;
         }
@@ -49,12 +50,10 @@ function getStyles({
 
 if (!module.parent) {
   getStyles({
-    start: {
-      fileName:
-        '/Users/atifafzal/scratch/personal/meta-x/server/src/fixtures/styled-components.tsx',
-      lineNumber: 12,
-      columnNumber: 20,
-    },
+    fileName:
+      '/Users/atifafzal/scratch/personal/icarus/workspace/src/components/Seeker/index.tsx',
+    lineNumber: 30,
+    columnNumber: 4,
   });
 }
 

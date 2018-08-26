@@ -4,6 +4,8 @@ import styled from 'styled-components';
 const SeekContainer = styled.div`
   padding: 0 18px;
   margin-bottom: 9px;
+  ${p => (p.theme ? '' : '')} display: flex;
+  ${p => (p.theme ? '' : '')} justify-content: center;
 `;
 
 const SeekLineWrapper = styled.div`
