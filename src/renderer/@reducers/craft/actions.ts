@@ -23,6 +23,7 @@ const actions = {
   handleSelectOverlayOnClick: actionCreator<string | undefined>(
     'handleSelectOverlayOnClick',
   ),
+  setRightTab: actionCreator<'components' | 'style'>('setRightTab'),
 };
 
 export default actions;

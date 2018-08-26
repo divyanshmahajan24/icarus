@@ -30,8 +30,21 @@ const ComponentCard = styled('div')`
 `;
 
 const ComponentTitle = styled('div')`
+  font-weight: 400;
+  font-size: 16px;
+`;
+
+const TabRow = styled('div')`
+  display: flex;
+  margin-bottom: 20px;
+`;
+
+const TabTitle = styled('div')<{ selected?: boolean }>`
+  font-size: 20px;
   font-weight: 600;
-  font-size: 18px;
+  margin-right: 24px;
+  cursor: pointer;
+  ${p => (p.selected ? 'border-bottom: 1px solid;' : '')};
 `;
 
 const ComponentInstanceContainer = styled('div')``;
@@ -45,12 +58,13 @@ const CraftingComponentWrapper = styled('div')`
 `;
 
 const TreeRow = styled('div')<{ depth: number }>`
-  height: 32px;
+  line-height: 24px;
   border-bottom: 1px solid grey;
   display: flex;
   align-items: center;
   margin-left: ${p => p.depth * 6}px;
   cursor: pointer;
+  font-size: 14px;
 `;
 
 type IProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
@@ -92,7 +106,22 @@ class HomeRoute extends React.Component<IProps> {
           <OverlayLayer />
         </>
         <RightPanel style={{ width: 400, padding: 10, overflowY: 'auto' }}>
-          {this.props.Icarus &&
+          <TabRow>
+            <TabTitle
+              selected={this.props.rightTab === 'components'}
+              onClick={() => this.props.setRightTab('components')}
+            >
+              components
+            </TabTitle>
+            <TabTitle
+              selected={this.props.rightTab === 'style'}
+              onClick={() => this.props.setRightTab('style')}
+            >
+              style
+            </TabTitle>
+          </TabRow>
+          {this.props.rightTab === 'components' &&
+            this.props.Icarus &&
             this.props.Icarus.workspace.map((a, i) => (
               <ComponentCard key={a.title}>
                 <ComponentTitle>{a.title}</ComponentTitle>
@@ -122,6 +151,7 @@ const mapStateToProps = (state: IRootState) => ({
   fiberRoot: state.craft.fiberRoot,
   selectedStyle: state.craft.selectedStyle,
   Icarus: state.craft.Icarus,
+  rightTab: state.craft.rightTab,
 });
 
 const mapDispatchToProps = {
@@ -131,6 +161,7 @@ const mapDispatchToProps = {
   setSelectedStyle: craftActions.setSelectedStyle,
   handleSelectOverlayOnClick: craftActions.handleSelectOverlayOnClick,
   setSelectedComponent: craftActions.setSelectedComponent,
+  setRightTab: craftActions.setRightTab,
 };
 
 export default connect(

@@ -13,6 +13,7 @@ export interface IReducerState {
   fiberRoot?: IFiberRoot;
   selectedOverlay?: string;
   selectedStyle?: Record<string, string>;
+  rightTab: 'components' | 'style';
   Icarus?: IIcarus;
   craftingDivRef: React.RefObject<HTMLDivElement>;
   /**
@@ -25,6 +26,7 @@ const INITIAL_STATE: IReducerState = {
   nodeMap: {},
   craftingDivRef: React.createRef(),
   selectedComponentInstance: [0, 0],
+  rightTab: 'components',
 };
 
 const reducer = reducerWithInitialState<IReducerState>(INITIAL_STATE)
@@ -61,6 +63,13 @@ const reducer = reducerWithInitialState<IReducerState>(INITIAL_STATE)
     (state, payload): IReducerState => ({
       ...state,
       selectedComponentInstance: payload,
+    }),
+  )
+  .case(
+    actions.setRightTab,
+    (state, payload): IReducerState => ({
+      ...state,
+      rightTab: payload,
     }),
   )
   .build();
