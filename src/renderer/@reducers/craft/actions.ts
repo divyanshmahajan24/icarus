@@ -17,7 +17,9 @@ const actions = {
   ),
   updateIcarus: actionCreator<IIcarus>('updateIcarus'),
   setSelectedOverlay: actionCreator<string | undefined>('setSelectedOverlay'),
-  setSelectedStyle: actionCreator<CSSStyleRule | undefined>('setSelectedStyle'),
+  setSelectedStyle: actionCreator<Record<string, string> | undefined>(
+    'setSelectedStyle',
+  ),
   handleSelectOverlayOnClick: actionCreator<string | undefined>(
     'handleSelectOverlayOnClick',
   ),

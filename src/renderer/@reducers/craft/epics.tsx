@@ -34,11 +34,7 @@ const epics: IEpic[] = [
               start: node._debugSource,
             }),
           ).pipe(
-            mergeMap(response => {
-              console.log(response);
-
-              return empty();
-            }),
+            mergeMap(response => of(actions.setSelectedStyle(response as any))),
           ),
         );
       }),

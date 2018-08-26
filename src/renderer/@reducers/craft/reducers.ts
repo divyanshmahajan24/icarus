@@ -12,7 +12,7 @@ export interface IReducerState {
   renderer?: IRenderer;
   fiberRoot?: IFiberRoot;
   selectedOverlay?: string;
-  selectedStyle?: CSSStyleRule;
+  selectedStyle?: Record<string, string>;
   Icarus?: IIcarus;
   craftingDivRef: React.RefObject<HTMLDivElement>;
   /**
