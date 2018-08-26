@@ -1,6 +1,6 @@
 import { readFile } from 'fs';
 import * as path from 'path';
-import { toString, replace } from 'ramda';
+import { toString } from 'ramda';
 import * as ts from 'typescript';
 import { promisify } from 'util';
 import { IJSXSource } from '../interfaces';
