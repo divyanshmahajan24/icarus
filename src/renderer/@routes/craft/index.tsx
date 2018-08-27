@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { IRootState } from '@reducers';
 import craftActions from '@reducers/craft/actions';
 import OverlayLayer from '@containers/OverlayLayer';
+import StyleInspector from '@containers/StyleInspector';
 import Droppable from '@services/droppable';
 
 const Container = styled('div')`
@@ -138,6 +139,7 @@ class HomeRoute extends React.Component<IProps> {
                 </div>
               </ComponentCard>
             ))}
+          {this.props.rightTab === 'style' && <StyleInspector />}
         </RightPanel>
       </Container>
     );
