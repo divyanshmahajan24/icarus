@@ -23,6 +23,7 @@ const LeftPanel = styled('div')`
 
 const RightPanel = styled('div')`
   width: 400px;
+  padding: 10px;
   overflow-y: scroll;
 `;
 
@@ -106,7 +107,7 @@ class HomeRoute extends React.Component<IProps> {
           </CraftingComponentWrapper>
           <OverlayLayer />
         </>
-        <RightPanel style={{ width: 400, padding: 10, overflowY: 'auto' }}>
+        <RightPanel>
           <TabRow>
             <TabTitle
               selected={this.props.rightTab === 'components'}
