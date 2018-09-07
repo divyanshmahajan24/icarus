@@ -113,7 +113,7 @@
 
 "@types/ramda@types/npm-ramda#dist":
   version "0.25.0"
-  resolved "https://codeload.github.com/types/npm-ramda/tar.gz/4dff37c10f771d60850dd04fa82ce0bf5a2b1d68"
+  resolved "https://codeload.github.com/types/npm-ramda/tar.gz/9529aa3c8ff70ff84afcbc0be83443c00f30ea90"
 
 "@types/react-dom@^16.0.7":
   version "16.0.7"
