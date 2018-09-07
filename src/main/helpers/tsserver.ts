@@ -22,9 +22,9 @@ function startServer(
   onMessage: (msg: ServerMessage) => void,
   onError?: (error: string) => void,
 ) {
-  const process = spawn('node', [tsserverPath]);
+  const languageServer = spawn('node', [tsserverPath]);
 
-  process.stdout.on('data', data => {
+  languageServer.stdout.on('data', data => {
     const messages: ServerMessage[] = R.pipe(
       R.toString,
       R.split(/[\r\n]+/g),
@@ -45,14 +45,14 @@ function startServer(
     messages.forEach(message => onMessage(message));
   });
 
-  process.stderr.on('data', data => {
+  languageServer.stderr.on('data', data => {
     if (onError) {
       onError(data.toString());
     }
   });
 
   function write<T extends protocol.Request>(msg: T) {
-    process.stdin.write(JSON.stringify(msg) + '\n');
+    languageServer.stdin.write(JSON.stringify(msg) + '\n');
   }
 
   return {
